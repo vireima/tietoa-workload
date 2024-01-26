@@ -1,8 +1,9 @@
 import { Link, useLoaderData } from "react-router-dom";
+import { config } from "../config";
 import axios from "axios";
 
 export async function loader({ params }) {
-  const response = await axios.get("http://localhost:8000/users");
+  const response = await axios.get(`${config.API_URL}/users`);
   const users = response.data;
   return { users };
 }
