@@ -19,7 +19,7 @@ export default function Users() {
         <ul>
           {users.map((user) => (
             <li key={user.user}>
-              <Link to={`/u/${user.user}`}>{user.slackname}</Link>
+              <Link to={`/u/${user.user}`}>{user.slackuser}</Link>
               {user.tags && user.tags.length
                 ? user.tags.map((tag) => {
                     tag;
