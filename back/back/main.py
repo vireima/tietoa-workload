@@ -10,8 +10,8 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:8080",
-    "https://tietoa-fron.up.railway.app",
-    "http://tietoa-fron.up.railway.app",
+    "https://tietoa-front.up.railway.app",
+    "http://tietoa-front.up.railway.app",
 ]
 
 app.add_middleware(
