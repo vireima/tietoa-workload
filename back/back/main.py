@@ -103,17 +103,28 @@ def input_load(comment: AddComment):
 
 
 @app.get("/users")
-def users():
-    return [
-        {
-            "user": "reima",
-            "slackname": "Ville",
-            "slackuser": "xxx",
-            "tags": ["TIE", "luottari"],
-        },
-        {"user": "kirsi", "slackname": "Kirrsi", "slackuser": "xyy"},
-        {"user": "leila", "slackname": "Leila86", "slackuser": "xxy"},
-    ]
+async def users():
+    headers = {"Authorization": f"Bearer {settings.grist_api_key}"}
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{settings.grist_api_url}/{settings.grist_api_userdoc}/tables/{settings.grist_api_usertable}/records",
+            headers=headers,
+        )
+
+        logger.debug(response)
+        return [x["fields"] for x in response.json()["records"]]
+
+    # return [
+    #     {
+    #         "user": "reima",
+    #         "slackname": "Ville",
+    #         "slackuser": "xxx",
+    #         "tags": ["TIE", "luottari"],
+    #     },
+    #     {"user": "kirsi", "slackname": "Kirrsi", "slackuser": "xyy"},
+    #     {"user": "leila", "slackname": "Leila86", "slackuser": "xxy"},
+    # ]
 
 
 @app.get("/test")
