@@ -1,5 +1,5 @@
 const prod = {
-  API_URL: "http://tietoa.up.railway.app",
+  API_URL: "https://tietoa.up.railway.app",
   // API_URL_USERS: "http://tietoa.up.railway.app/users",
 };
 
