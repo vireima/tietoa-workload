@@ -16,7 +16,8 @@
     "react-dom": "^18.2.0",
     "react-router": "^6.21.3",
     "react-router-dom": "^6.21.3",
-    "react-vega": "^7.6.0"
+    "react-vega": "^7.6.0",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
