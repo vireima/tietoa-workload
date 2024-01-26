@@ -1,8 +1,7 @@
 import axios from "axios";
+import { config } from "../config";
 
-// const baseUrl = "http://tietoa.up.railway.app";
-const baseUrl = "http://localhost:8000/loads/";
-
-const getAll = () => axios.get(baseUrl).then((response) => response.data);
+const getAll = () =>
+  axios.get(`${config.API_URL}/loads/`).then((response) => response.data);
 
 export default { getAll };
