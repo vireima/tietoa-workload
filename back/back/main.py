@@ -1,3 +1,5 @@
+import httpx
+from config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
@@ -107,3 +109,20 @@ def users():
         {"user": "kirsi", "slackname": "Kirrsi", "slackuser": "xyy"},
         {"user": "leila", "slackname": "Leila86", "slackuser": "xxy"},
     ]
+
+
+@app.get("/test")
+async def test():
+    # https://<docs|TEAM>.getgrist.com/api/docs/
+    headers = {"Authorization": f"Bearer {settings.grist_api_key}"}
+
+    logger.debug(headers)
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{settings.grist_api_url}/{settings.grist_api_userdoc}/tables/{settings.grist_api_usertable}/records",
+            headers=headers,
+        )
+
+        logger.debug(response)
+        return [x["fields"] for x in response.json()["records"]]
