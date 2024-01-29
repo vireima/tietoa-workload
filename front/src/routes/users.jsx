@@ -11,18 +11,23 @@ export async function loader({ params }) {
 export default function Users() {
   const { users } = useLoaderData();
 
-  console.log(users);
+  // console.log(users);
 
   return (
     <div>
       {users.length ? (
         <ul>
-          {users.map((user) => (
-            <li key={user.user}>
-              <Link to={`/u/${user.user}`}>{user.slackuser}</Link>
-              {user.tags && user.tags.length
-                ? user.tags.map((tag) => {
-                    tag;
+          {users.map((user, user_index) => (
+            <li key={user_index}>
+              <Link to={`/i/${user.user}`}>{user.username}</Link>
+              {user.tags
+                ? user.tags.map((tag, index) => {
+                    return (
+                      <span>
+                        #{tag}
+                        {index < user.tags.length - 1 ? ", " : ""}
+                      </span>
+                    );
                   })
                 : ""}
             </li>

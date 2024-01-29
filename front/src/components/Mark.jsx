@@ -5,7 +5,7 @@ export default function Mark({ visible, success, size, position }) {
   //   console.log(visible, position, success);
   return (
     <>
-      {
+      {visible ? (
         <span
           className={classes}
           style={{
@@ -15,7 +15,9 @@ export default function Mark({ visible, success, size, position }) {
             top: position.y - size / 2.0,
           }}
         ></span>
-      }
+      ) : (
+        <></>
+      )}
     </>
   );
 }

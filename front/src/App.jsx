@@ -22,21 +22,19 @@ function App() {
       path: "/",
       element: <Root />,
       errorElement: <Error />,
-    },
-    {
-      path: "/u/",
-      element: <Users />,
-      loader: usersLoader,
-    },
-    {
-      path: "/u/:user",
-      element: <User />,
-      loader: userLoader,
-    },
-    {
-      path: "/i/:user",
-      element: <Input />,
-      loader: userLoader,
+      children: [
+        {
+          path: "i/:user",
+          element: <Input />,
+          loader: userLoader,
+        },
+        { path: "u/:user", element: <User />, loader: userLoader },
+        {
+          path: "u/",
+          element: <Users />,
+          loader: usersLoader,
+        },
+      ],
     },
   ]);
 

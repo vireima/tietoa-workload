@@ -1,6 +1,11 @@
+import datetime
+
 import httpx
+import loads
+import models
+import mongo
 from config import settings
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 from pydantic import BaseModel, Field
@@ -22,24 +27,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-logger.debug("> Aloitus.")
-
-
-class Load(BaseModel):
-    user: str
-    workload: float = Field(ge=0.0, le=1.0)
-    mentalload: float = Field(ge=0.0, le=1.0)
-    comment: str | None = None
-
 
 class AddComment(BaseModel):
     id: str
     comment: str
 
 
+async def get_grist_users():
+    headers = {"Authorization": f"Bearer {settings.grist_api_key}"}
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{settings.grist_api_url}/{settings.grist_api_userdoc}/tables/{settings.grist_api_usertable}/records",
+            headers=headers,
+        )
+
+        return [x["fields"] for x in response.json()["records"]]
+
+
 @app.get("/")
 def root():
-    logger.debug("> root().")
     return [
         {
             "message": "Hello!",
@@ -57,63 +64,72 @@ def root():
 
 
 @app.get("/loads")
-def loads():
-    return [
-        {
-            "workload": 0.4,
-            "mentalload": 0.2,
-            "user": "reima",
-            "comment": "vähä kyrsii",
-            "timestamp": "2024-01-20T12:30+02:00",
-        },
-        {
-            "workload": 0.45,
-            "mentalload": 0.3,
-            "user": "reima",
-            "comment": "",
-            "timestamp": "2024-01-23T14:30+02:00",
-        },
-        {
-            "workload": 0.35,
-            "mentalload": 0.1,
-            "user": "kirsi",
-            "comment": "",
-            "timestamp": "2024-01-19T7:30+02:00",
-        },
-        {
-            "workload": 0.25,
-            "mentalload": 0.91,
-            "user": "leila",
-            "comment": "ääääähh",
-            "timestamp": "2024-01-22T11:30+02:00",
-        },
-    ]
+async def get_loads(query: models.LoadQueryInputModel = Depends()):
+    return (await loads.loads(query)).to_dict(orient="records")
+
+    # return [
+    #     {
+    #         "workload": 0.4,
+    #         "mentalload": 0.2,
+    #         "user": "reima",
+    #         "comment": "vähä kyrsii",
+    #         "timestamp": "2024-01-20T12:30+02:00",
+    #     },
+    #     {
+    #         "workload": 0.45,
+    #         "mentalload": 0.3,
+    #         "user": "reima",
+    #         "comment": "",
+    #         "timestamp": "2024-01-23T14:30+02:00",
+    #     },
+    #     {
+    #         "workload": 0.35,
+    #         "mentalload": 0.1,
+    #         "user": "kirsi",
+    #         "comment": "",
+    #         "timestamp": "2024-01-19T7:30+02:00",
+    #     },
+    #     {
+    #         "workload": 0.25,
+    #         "mentalload": 0.91,
+    #         "user": "leila",
+    #         "comment": "ääääähh",
+    #         "timestamp": "2024-01-22T11:30+02:00",
+    #     },
+    # ]
 
 
 @app.post("/loads")
-def input_load(load: Load):
+async def input_load(load: models.LoadInputModel):
     logger.debug(f"POST: {load.user} {load.workload} {load.mentalload}")
-    return {"id": "EFG523y"}
+    return await mongo.insert_load(load)
 
 
-@app.patch("/loads")
-def input_load(comment: AddComment):
-    logger.debug(f"PATCH: {comment.id} {comment.comment}")
-    return ""
+@app.patch("/loads/{load_id}")
+async def input_load(load_id: str, load: models.LoadPatchInputModel):
+    logger.debug(f"PATCH: {load_id} {load.comment}")
+    logger.debug(load)
+    if await mongo.update_comment(load_id, load.comment) > 0:
+        return load_id
+
+    logger.warning("ei löytyny!")
+    raise HTTPException(status_code=404, detail="Load not found")
 
 
 @app.get("/users")
 async def users():
-    headers = {"Authorization": f"Bearer {settings.grist_api_key}"}
+    return await get_grist_users()
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            f"{settings.grist_api_url}/{settings.grist_api_userdoc}/tables/{settings.grist_api_usertable}/records",
-            headers=headers,
-        )
 
-        logger.debug(response)
-        return [x["fields"] for x in response.json()["records"]]
+@app.get("/user/{user}")
+async def users(user: str):
+    users = await get_grist_users()
+
+    for user_data in users:
+        if user_data["user"] == user:
+            return user_data
+
+    raise HTTPException(status_code=404, detail="User not found")
 
     # return [
     #     {
@@ -142,3 +158,19 @@ async def test():
 
         logger.debug(response)
         return [x["fields"] for x in response.json()["records"]]
+
+
+@app.get("/test2")
+async def test3():
+    item = models.LoadInputModel(user="A", workload=0.4, mentalload=0.3)
+    return await mongo.insert_load(item)
+
+
+@app.get("/test2/{id}")
+async def test3(id: str):
+    return await mongo.update_comment(id, "Uusi kommentti")
+
+
+@app.get("/fetch/{after}")
+async def test3(after: datetime.datetime):
+    return await loads.loads(after)
