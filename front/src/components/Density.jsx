@@ -66,7 +66,7 @@ const LineChart = createClassFromSpec({ mode: "vega-lite", spec: spec });
 
 const Timeline = ({ filteredLoads }) => {
   const dat = { loads: filteredLoads };
-  return <LineChart spec={spec} data={dat} />;
+  return <LineChart spec={spec} data={dat} actions={false} theme="dark" />;
 };
 
 export default Timeline;

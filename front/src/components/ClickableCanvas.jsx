@@ -3,6 +3,7 @@ import axios from "axios";
 import { config } from "../config";
 import Mark from "./Mark";
 import CommentInput from "./CommentInput";
+import { Link } from "react-router-dom";
 
 export default function ClickableCanvas({ user }) {
   const [globalMousePos, setGlobalMousePos] = useState({});
@@ -97,6 +98,7 @@ export default function ClickableCanvas({ user }) {
   return (
     <>
       <h2>{user.username}</h2>
+      <Link to={`/u/${user.user}`}>Omat sivut</Link>
       <div className="input-table">
         <div className="input-row">
           <div className="input-cell vertical">

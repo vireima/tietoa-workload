@@ -43,6 +43,7 @@ export default function LoadsWithGUI({ user }) {
 
   return (
     <div>
+      <h2>{user.username}</h2>
       <Timeline filteredLoads={loads} />
       <Load filteredLoads={loads} />
       <Density filteredLoads={loads} />
