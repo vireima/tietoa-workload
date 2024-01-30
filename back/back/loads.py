@@ -23,7 +23,6 @@ async def fetch_users() -> list[models.UserOutputModel]:
 
 
 async def loads(query: models.LoadQueryInputModel):
-    logger.debug(query)
     loads = await mongo.get_loads(**query.model_dump(exclude={"tags"}))
     users = await fetch_users()
 
@@ -49,7 +48,6 @@ async def loads(query: models.LoadQueryInputModel):
     users_df = pd.concat(
         (users_df, pd.DataFrame((user.model_dump() for user in users)))
     )
-    logger.debug(users_df)
 
     merged = loads_df.merge(users_df, how="left", on="user")
 
@@ -58,4 +56,13 @@ async def loads(query: models.LoadQueryInputModel):
 
     tag_mask = merged.tags.map(set(query.tags).issubset)
 
+    logger.debug(tag_mask)
+
     return merged[tag_mask]
+
+
+def calculate_stats(loads: pd.DataFrame):
+    count = loads.shape[0]
+    mean_mental = loads.mentalload.mean()
+    mean_work = loads.workload.mean()
+    pass

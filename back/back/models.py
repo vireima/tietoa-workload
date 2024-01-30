@@ -31,5 +31,8 @@ class UserOutputModel(BaseModel):
 class LoadQueryInputModel(BaseModel):
     after: datetime.datetime | datetime.date | None = None
     before: datetime.datetime | datetime.date | None = None
+
+
+class LoadQueryInputModelWithLists(LoadQueryInputModel):
     users: list[str] | None = None
     tags: list[str] | None = None

@@ -1,11 +1,12 @@
 import datetime
+from typing import Annotated, List
 
 import httpx
 import loads
 import models
 import mongo
 from config import settings
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 from pydantic import BaseModel, Field
@@ -64,8 +65,19 @@ def root():
 
 
 @app.get("/loads")
-async def get_loads(query: models.LoadQueryInputModel = Depends()):
-    return (await loads.loads(query)).to_dict(orient="records")
+async def get_loads(
+    tags: Annotated[List[str] | None, Query()] = None,
+    users: Annotated[List[str] | None, Query()] = None,
+    after: datetime.datetime | None = None,
+    before: datetime.datetime | None = None,
+):
+    logger.critical(tags)
+
+    query_with_lists = models.LoadQueryInputModelWithLists(
+        tags=tags, users=users, after=after, before=before
+    )
+    logger.critical(query_with_lists)
+    return (await loads.loads(query_with_lists)).to_dict(orient="records")
 
     # return [
     #     {
