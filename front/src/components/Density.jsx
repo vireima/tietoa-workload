@@ -1,13 +1,8 @@
-import { Vega, VegaLite, createClassFromSpec } from "react-vega";
-import { default_spec } from "../config";
+import VegaComponent from "./VegaComponent";
 
 const spec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-  description: "A simple bar chart with embedded data.",
-  ...default_spec,
-  title: "Kiireen jakautuminen",
-  width: 400,
-  height: 200,
+  title: "Kiirekyselyn tulosten jakautuminen",
 
   data: { name: "loads" },
   layer: [
@@ -61,12 +56,6 @@ const spec = {
     // },
   ],
 };
-
-const LineChart = createClassFromSpec({ mode: "vega-lite", spec: spec });
-
-const Timeline = ({ filteredLoads }) => {
-  const dat = { loads: filteredLoads };
-  return <LineChart spec={spec} data={dat} actions={false} theme="dark" />;
-};
-
-export default Timeline;
+export default function Density({ filteredLoads }) {
+  return <VegaComponent data={{ loads: filteredLoads }} vega_spec={spec} />;
+}

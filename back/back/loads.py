@@ -35,7 +35,6 @@ async def loads(query: models.LoadQueryInputModel):
         }
     )
     loads_df = pd.concat((loads_df, pd.DataFrame(load.model_dump() for load in loads)))
-    logger.debug(loads_df)
 
     users_df = pd.DataFrame(
         {
@@ -55,8 +54,6 @@ async def loads(query: models.LoadQueryInputModel):
         return merged
 
     tag_mask = merged.tags.map(set(query.tags).issubset)
-
-    logger.debug(tag_mask)
 
     return merged[tag_mask]
 

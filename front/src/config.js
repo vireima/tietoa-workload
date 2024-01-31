@@ -8,34 +8,64 @@ const dev = {
 };
 
 export const default_spec = {
+  width: 400,
+  height: 400,
   background: "rgba(0, 0, 0, 0)",
-  view: {
-    fill: "rgba(127.5, 127.5, 127.5, 0.1)",
-    titleColor: "gray",
-  },
+
   config: {
     font: "consolas",
+    titleFontWeight: "normal",
+
     axis: {
-      grid: true,
       gridOpacity: 0.05,
-
       labelFontWeight: "normal",
-      labelColor: "gray",
-
       titleFontWeight: "normal",
       titleColor: "gray",
       titlePadding: 14,
+      domainColor: "gray",
+      tickColor: "gray",
     },
-    header: {
-      titleColor: "red",
-    },
+
     legend: {
       title: null,
-      labelColor: "gray",
       labelExpr:
         "datum.label == 'mentalload' ? 'Kiireen tuntu' : datum.label == 'workload' ? 'Kiireen määrä' : datum.label",
     },
+
+    style: {
+      "guide-label": {
+        fill: "gray",
+      },
+    },
   },
+  // view: {
+  //   fill: "rgba(127.5, 127.5, 127.5, 0.1)",
+  //   titleColor: "gray",
+  // },
+  // config: {
+  //   font: "consolas",
+  //   axis: {
+  //     grid: true,
+  //     gridOpacity: 0.05,
+  //     labelFontWeight: "normal",
+  //     labelColor: "gray",
+  //     titleFontWeight: "normal",
+  //     titleColor: "gray",
+  //     titlePadding: 14,
+  //   },
+  //   header: {
+  //     titleColor: "red",
+  //   },
+  //   legend: {
+  //     title: null,
+  //     labelColor: "gray",
+  //     labelExpr:
+  //       "datum.label == 'mentalload' ? 'Kiireen tuntu' : datum.label == 'workload' ? 'Kiireen määrä' : datum.label",
+  //   },
+  // },
 };
+
+export const default_theme_dark = "dark";
+export const default_theme_light = "default";
 
 export const config = process.env.NODE_ENV === "development" ? dev : prod;

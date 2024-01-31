@@ -1,6 +1,18 @@
 import datetime
 
-from pydantic import BaseModel, Field
+from loguru import logger
+from pydantic import BaseModel, BeforeValidator, Field
+from typing_extensions import Annotated
+
+
+def validate_tags(tags: list[str]):
+    return [] if tags is None else [tag for tag in tags if tag != "L"]
+
+
+Tags = Annotated[
+    list[str],
+    BeforeValidator(validate_tags),
+]
 
 
 class LoadInputModel(BaseModel):
@@ -24,7 +36,7 @@ class LoadOutputModel(LoadInputModel):
 class UserOutputModel(BaseModel):
     username: str
     user: str
-    tags: list[str] | None = None
+    tags: Tags
     active: bool
 
 

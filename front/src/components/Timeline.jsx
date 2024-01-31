@@ -1,13 +1,8 @@
-import { Vega, VegaLite, createClassFromSpec } from "react-vega";
-import { default_spec } from "../config";
+import VegaComponent from "./VegaComponent";
 
 const spec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-  description: "A simple bar chart with embedded data.",
-  ...default_spec,
-
-  width: 400,
-  height: 400,
+  title: "Kiire aikajanalla",
 
   data: { name: "loads" },
 
@@ -38,14 +33,29 @@ const spec = {
           {
             field: "username",
             type: "nominal",
-          },
-          {
-            field: "comment",
-            type: "nominal",
+            title: "Nimi",
           },
           {
             field: "datetime",
             type: "temporal",
+            title: "Päiväys",
+            formatType: "time",
+            format: "%-d.%-m.%Y %H:%M",
+          },
+          {
+            field: "mentalload",
+            title: "Kiireen tuntu",
+            format: ".0%",
+          },
+          {
+            field: "workload",
+            title: "Kiireen määrä",
+            format: ".0%",
+          },
+          {
+            field: "comment",
+            type: "nominal",
+            title: "Kommentti",
           },
         ],
       },
@@ -69,21 +79,12 @@ const spec = {
         },
         color: {
           field: "key",
-          legend: {
-            labelExpr:
-              "datum.label == 'mentalload' ? 'Kiireen tuntu' : datum.label == 'workload' ? 'Kiireen määrä' : ''",
-          },
         },
       },
     },
   ],
 };
 
-const LineChart = createClassFromSpec({ mode: "vega-lite", spec: spec });
-
-const Timeline = ({ filteredLoads }) => {
-  const dat = { loads: filteredLoads };
-  return <LineChart spec={spec} data={dat} />;
-};
-
-export default Timeline;
+export default function Timeline({ filteredLoads }) {
+  return <VegaComponent data={{ loads: filteredLoads }} vega_spec={spec} />;
+}
