@@ -7,19 +7,32 @@ const spec = {
   data: { name: "loads" },
   layer: [
     {
-      mark: "point",
+      mark: "circle",
       encoding: {
         x: {
           field: "workload",
           type: "quantitative",
           scale: { domain: [0.0, 1.0] },
           title: "Kiireen määrä",
+          axis: {
+            titlePadding: -35,
+          },
         },
         y: {
           field: "mentalload",
           type: "quantitative",
           scale: { domain: [0.0, 1.0] },
           title: "Kiireen tuntu",
+          axis: {
+            titlePadding: -40,
+          },
+        },
+        size: {
+          condition: {
+            test: "datum.comment != null",
+            value: 80,
+          },
+          value: 15,
         },
         tooltip: [
           {

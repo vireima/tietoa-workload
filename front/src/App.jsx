@@ -9,7 +9,10 @@ import User, { loader as userLoader } from "./routes/user";
 import Users, { loader as usersLoader } from "./routes/users";
 import Input from "./routes/input";
 import Error from "./routes/error";
+import Data, { loader as dataLoader } from "./routes/data";
 import Dashboard from "./routes/dashboard";
+import Display from "./routes/display";
+import TagFilter from "./components/TagFilter";
 
 function App() {
   const [data, setData] = useState([]);
@@ -39,6 +42,41 @@ function App() {
           element: <Users />,
           loader: usersLoader,
         },
+        {
+          path: ":tag",
+          element: <Dashboard />,
+        },
+      ],
+    },
+    {
+      path: "/v2",
+      element: <Data />,
+      errorElement: <Error />,
+      loader: dataLoader,
+      children: [
+        {
+          path: "",
+          element: <Display />,
+        },
+        // {
+        //   path: "i/:user",
+        //   element: <Input />,
+        //   loader: userLoader,
+        // },
+        // { path: "u/:user", element: <User />, loader: userLoader },
+        // {
+        //   path: "u/",
+        //   element: <Users />,
+        //   loader: usersLoader,
+        // },
+        {
+          path: "tag/:tag",
+          element: <TagFilter />,
+        },
+        // {
+        //   path: "user/:user",
+        //   element: <Display />,
+        // },
       ],
     },
   ]);

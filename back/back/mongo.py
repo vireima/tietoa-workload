@@ -1,9 +1,7 @@
 import datetime
 
 import arrow
-import models
 from bson import ObjectId
-from config import settings
 from loguru import logger
 from motor.motor_asyncio import (
     AsyncIOMotorClient,
@@ -11,6 +9,9 @@ from motor.motor_asyncio import (
     AsyncIOMotorCursor,
     AsyncIOMotorDatabase,
 )
+
+from back import models
+from back.config import settings
 
 client = AsyncIOMotorClient(str(settings.mongo_url))
 

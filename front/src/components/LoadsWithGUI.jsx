@@ -7,9 +7,10 @@ import { DateTime } from "luxon";
 import Timeline from "./Timeline";
 import Density from "./Density";
 import { Link } from "react-router-dom";
+import StatisticWidget from "./StatisticWidget";
 
 export default function LoadsWithGUI({ user }) {
-  const [loads, setLoads] = useState([]);
+  const [data, setData] = useState([]);
   const [after, setAfter] = useState(
     DateTime.now().minus({ months: 3 }).toFormat("yyyy-MM-dd'T'HH:mm")
   );
@@ -35,7 +36,7 @@ export default function LoadsWithGUI({ user }) {
 
     console.log("data: ", data);
 
-    setLoads(data);
+    setData(data);
   }
 
   useEffect(() => {
@@ -55,9 +56,29 @@ export default function LoadsWithGUI({ user }) {
         )}
       </div>
       <div className="dashboard-charts">
-        <Timeline filteredLoads={loads} />
-        <Load filteredLoads={loads} />
-        <Density filteredLoads={loads} />
+        <Timeline filteredLoads={data.data} />
+        <Load filteredLoads={data.data} />
+        <Density filteredLoads={data.data} />
+        <StatisticWidget
+          description="Kiireen tuntu"
+          name="mentalload"
+          value={data?.summary?.latest?.mean_mentalload ?? 0}
+          reference_value={data?.summary?.weekly?.mean_mentalload ?? 0}
+          percentage={true}
+        />
+        <StatisticWidget
+          description="Kiireen määrä"
+          name="workload"
+          value={data?.summary?.latest?.mean_mentalload ?? 0}
+          reference_value={data?.summary?.weekly?.mean_mentalload ?? 0}
+          percentage={true}
+        />
+        <StatisticWidget
+          description="Kysylyvastausten määrä"
+          name="count"
+          value={data?.summary?.latest?.mean_count ?? 0}
+          reference_value={data?.summary?.weekly?.mean_count ?? 0}
+        />
       </div>
       <div className="dashboard-filters">
         <input

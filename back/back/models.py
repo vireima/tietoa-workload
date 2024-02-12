@@ -1,12 +1,29 @@
 import datetime
 
+import arrow
+import pytz
 from loguru import logger
 from pydantic import BaseModel, BeforeValidator, Field
 from typing_extensions import Annotated
 
+TZ_UTC = pytz.timezone("UTC")
+TZ_LOCAL = pytz.timezone("Europe/Helsinki")
+
 
 def validate_tags(tags: list[str]):
     return [] if tags is None else [tag for tag in tags if tag != "L"]
+
+
+def validate_utc_datetime(dt: datetime.datetime | str):
+    if isinstance(dt, str):
+        dt = arrow.get(dt).datetime
+    return TZ_UTC.localize(dt) if dt.tzinfo is None else dt
+
+
+def validate_local_datetime(dt: datetime.datetime | str):
+    if isinstance(dt, str):
+        dt = arrow.get(dt).datetime
+    return TZ_LOCAL.localize(dt) if dt.tzinfo is None else dt
 
 
 Tags = Annotated[
@@ -14,11 +31,22 @@ Tags = Annotated[
     BeforeValidator(validate_tags),
 ]
 
+DatetimeUTC = Annotated[datetime.datetime, BeforeValidator(validate_utc_datetime)]
 
-class LoadInputModel(BaseModel):
-    user: str
+DatetimeLocal = Annotated[datetime.datetime, BeforeValidator(validate_local_datetime)]
+
+
+class LoadBaseModel(BaseModel):
     workload: float = Field(ge=0.0, le=1.0)
     mentalload: float = Field(ge=0.0, le=1.0)
+
+
+class StatisticsOutputModel(LoadBaseModel):
+    count: float
+
+
+class LoadInputModel(LoadBaseModel):
+    user: str
     comment: str | None = None
 
 
@@ -29,7 +57,7 @@ class LoadPatchInputModel(BaseModel):
 
 
 class LoadOutputModel(LoadInputModel):
-    datetime: datetime.datetime
+    datetime: DatetimeUTC
     # _id: str
 
 
@@ -41,8 +69,8 @@ class UserOutputModel(BaseModel):
 
 
 class LoadQueryInputModel(BaseModel):
-    after: datetime.datetime | datetime.date | None = None
-    before: datetime.datetime | datetime.date | None = None
+    after: DatetimeLocal | None = None
+    before: DatetimeLocal | None = None
 
 
 class LoadQueryInputModelWithLists(LoadQueryInputModel):

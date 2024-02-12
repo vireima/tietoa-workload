@@ -48,7 +48,7 @@ export default function ClickableCanvas({ user }) {
         .patch(`${config.API_URL}/loads/${loadId}`, {
           user: user.user,
           workload: localMousePos.x / canvasWidth,
-          mentalload: localMousePos.y / canvasHeight,
+          mentalload: 1.0 - localMousePos.y / canvasHeight,
         })
         .then(handleSuccess)
         .catch(handleFailure);
@@ -57,7 +57,7 @@ export default function ClickableCanvas({ user }) {
         .post(`${config.API_URL}/loads`, {
           user: user.user,
           workload: localMousePos.x / canvasWidth,
-          mentalload: localMousePos.y / canvasHeight,
+          mentalload: 1.0 - localMousePos.y / canvasHeight,
         })
         .then(handleSuccess)
         .catch(handleFailure);

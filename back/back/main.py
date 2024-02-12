@@ -2,14 +2,13 @@ import datetime
 from typing import Annotated, List
 
 import httpx
-import loads
-import models
-import mongo
-from config import settings
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 from pydantic import BaseModel, Field
+
+from back import loads, models, mongo
+from back.config import settings
 
 app = FastAPI()
 
@@ -57,7 +56,10 @@ async def get_loads(
         tags=tags, users=users, after=after, before=before
     )
 
-    return (await loads.loads(query_with_lists)).to_dict(orient="records")
+    data = await loads.loads(query_with_lists)
+    stats = loads.calculate_stats(data)
+
+    return {"data": data.to_dict(orient="records"), "summary": stats}
 
 
 @app.post("/loads")

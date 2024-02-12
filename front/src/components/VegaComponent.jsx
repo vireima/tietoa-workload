@@ -32,11 +32,13 @@ export default function VegaComponent({ vega_spec, data }) {
   }, []);
 
   return (
-    <Chart
-      spec={spec}
-      data={data}
-      actions={false}
-      theme={mode == "light" ? default_theme_light : default_theme_dark}
-    />
+    <div className="chart widget">
+      <Chart
+        spec={spec}
+        data={data}
+        actions={false}
+        theme={mode == "light" ? default_theme_light : default_theme_dark}
+      />
+    </div>
   );
 }
