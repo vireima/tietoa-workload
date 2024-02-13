@@ -1,0 +1,19 @@
+.navigation > a {
+  display: block;
+  padding: 0.3em;
+  text-align: left;
+  min-width: 4em;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.navigation > a.navigation-user {
+  padding: 0 0 0 1em;
+}
+
+.navigation > a:hover {
+  border-bottom: 1px solid gray;
+}
+
+.navigation > a.selected {
+  border-bottom: 1px solid gray;
+}

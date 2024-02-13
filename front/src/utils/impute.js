@@ -18,9 +18,7 @@ function calculateDailyMeans(data) {
 }
 
 function imputeArray(data, minDate, maxDate) {
-  data.forEach(
-    (value) => (value.date = DateTime.fromISO(value.datetime).toISODate())
-  );
+  data.forEach((value) => (value.date = value.datetime_luxon.toISODate()));
 
   const calculatedDailyMeans = calculateDailyMeans(data);
 

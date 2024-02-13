@@ -4,6 +4,7 @@ import React from "react";
 import axios from "axios";
 import Loading from "../components/notifications/Loading";
 import NoData from "../components/notifications/NoData";
+import { DateTime } from "luxon";
 
 export async function loader({ params }) {
   const usersPromise = axios
@@ -11,7 +12,13 @@ export async function loader({ params }) {
     .then((response) => response.data);
   const workloadDataPromise = axios
     .get(`${config.API_URL}/loads`)
-    .then((response) => response.data);
+    .then((response) => {
+      response.data.data.forEach((load) => {
+        load.datetime_luxon = DateTime.fromISO(load.datetime);
+      });
+
+      return response.data;
+    });
 
   const allPromise = Promise.all([usersPromise, workloadDataPromise]).then(
     (values) => {
@@ -24,14 +31,11 @@ export async function loader({ params }) {
 
 export default function Data() {
   const loadedData = useLoaderData();
+
   return (
     <React.Suspense fallback={<Loading />}>
       <Await resolve={loadedData.data} errorElement={<NoData />}>
-        {(data) => (
-          <div className="v2">
-            <Outlet context={data} />
-          </div>
-        )}
+        {(data) => <Outlet context={data} />}
       </Await>
     </React.Suspense>
   );

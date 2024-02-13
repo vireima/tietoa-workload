@@ -13,6 +13,8 @@ import Data, { loader as dataLoader } from "./routes/data";
 import Dashboard from "./routes/dashboard";
 import Display from "./routes/display";
 import TagFilter from "./components/TagFilter";
+import UserFilter from "./components/UserFilter";
+import NoFilter from "./components/NoFilter";
 
 function App() {
   const [data, setData] = useState([]);
@@ -56,7 +58,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <Display />,
+          element: <NoFilter />,
         },
         // {
         //   path: "i/:user",
@@ -73,10 +75,10 @@ function App() {
           path: "tag/:tag",
           element: <TagFilter />,
         },
-        // {
-        //   path: "user/:user",
-        //   element: <Display />,
-        // },
+        {
+          path: "u/:user",
+          element: <UserFilter />,
+        },
       ],
     },
   ]);

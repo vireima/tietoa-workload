@@ -3,23 +3,24 @@ import NavigationColumn from "./NavigationColumn";
 import FilteredDashboard from "./FilteredDashboard";
 import Header from "./Header";
 
-export default function TagFilter() {
+export default function UserFilter() {
   const { users, workloads } = useOutletContext();
-  const { tag } = useParams();
+  const { user } = useParams();
 
-  const filteredUsers = users.filter((userdata) => userdata.tags.includes(tag));
-  const filteredUserIDs = filteredUsers.map((userdata) => userdata.user);
-  const filteredWorkloads = workloads.data.filter((input) =>
-    filteredUserIDs.includes(input.user)
+  const filteredUsers = users.filter((userdata) => user === userdata.user);
+  const filteredWorkloads = workloads.data.filter(
+    (input) => user === input.user
   );
+
+  console.log(user, filteredUsers);
 
   return (
     <div className="column">
       <div>
-        <Header text={`Kiirekysely ${tag}`} />
+        <Header text={`Kiirekysely, ${filteredUsers[0].username}`} />
       </div>
       <div className="v2">
-        <NavigationColumn users={users} tag={tag} />
+        <NavigationColumn users={users} />
         <FilteredDashboard
           users={users}
           filteredUsers={filteredUsers}

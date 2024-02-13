@@ -9,22 +9,23 @@ function rolling(inputArray, size) {
   );
 }
 
-export default function Trend({ users, workloads }) {
-  const weekAgo = DateTime.now().minus({ days: 7 });
-  const withinWeek = workloads.filter(
+export default function Trend({ users, workloads, range }) {
+  const weekAgo = DateTime.now().minus({ days: range });
+  const withinRange = workloads.filter(
     (load) => DateTime.fromISO(load.date) >= weekAgo
   );
 
-  const workloadLastWeek = withinWeek.map((load) => load.workload);
-  const mentalloadLastWeek = withinWeek.map((load) => load.mentalload);
+  const workloadLastWeek = withinRange.map((load) => load.workload);
+  const mentalloadLastWeek = withinRange.map((load) => load.mentalload);
 
-  const weekWindows = rolling(workloads, 7).map((loads) => {
+  const weekWindows = rolling(workloads, range).map((loads) => {
     return {
       workload: mean(loads.map((load) => load.workload)),
       mentalload: mean(loads.map((load) => load.mentalload)),
       count: loads.filter((load) => !load.imputed).length,
     };
   });
+
   const meanWeeklyCount = mean(weekWindows.map((load) => load.count));
   const meanWeeklyWorkload = mean(weekWindows.map((load) => load.workload));
   const meanWeeklyMentalload = mean(weekWindows.map((load) => load.mentalload));
@@ -37,7 +38,7 @@ export default function Trend({ users, workloads }) {
           header="Kiireen määrä:"
           value={mean(workloadLastWeek)}
           reference_value={meanWeeklyWorkload}
-          description="Kiireen määrä 7 vrk sisään vs. pitkä keskiarvo"
+          description={`<p>Kiireen määrä keskimäärin<br />- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskiarvoon</p>`}
           percentage={true}
         />
         <StatisticWidget
@@ -45,15 +46,15 @@ export default function Trend({ users, workloads }) {
           header="Kiireen tuntu:"
           value={mean(mentalloadLastWeek)}
           reference_value={meanWeeklyMentalload}
-          description="Kiireen tuntu 7 vrk sisään vs. pitkä keskiarvo"
+          description={`<p>Kiireen tuntu keskimäärin<br/>- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskiarvoon</p>`}
           percentage={true}
         />
         <StatisticWidget
           name="statistics-weekly-count"
           header="Vastauksia:"
-          value={withinWeek.filter((load) => !load.imputed).length}
+          value={withinRange.filter((load) => !load.imputed).length}
           reference_value={meanWeeklyCount}
-          description="Kiirekyselyn vastauksia 7 vrk sisään vs. viikot keskimäärin"
+          description={`<p>Kiirekyselyn vastausten määrä<br/>- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskimääräiseen vastausmäärään</p>`}
           percentage={false}
         />
       </div>
