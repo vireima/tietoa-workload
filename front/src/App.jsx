@@ -12,9 +12,11 @@ import Error from "./routes/error";
 import Data, { loader as dataLoader } from "./routes/data";
 import Dashboard from "./routes/dashboard";
 import Display from "./routes/display";
-import TagFilter from "./components/TagFilter";
-import UserFilter from "./components/UserFilter";
+import TagPage from "./components/TagPage";
+import UserPageFilter from "./components/UserPageFilter";
 import NoFilter from "./components/NoFilter";
+import UserPage from "./components/UserPage";
+import OverallPage from "./components/OverallPage";
 
 function App() {
   const [data, setData] = useState([]);
@@ -58,26 +60,15 @@ function App() {
       children: [
         {
           path: "",
-          element: <NoFilter />,
+          element: <OverallPage />,
         },
-        // {
-        //   path: "i/:user",
-        //   element: <Input />,
-        //   loader: userLoader,
-        // },
-        // { path: "u/:user", element: <User />, loader: userLoader },
-        // {
-        //   path: "u/",
-        //   element: <Users />,
-        //   loader: usersLoader,
-        // },
         {
           path: "tag/:tag",
-          element: <TagFilter />,
+          element: <TagPage />,
         },
         {
           path: "u/:user",
-          element: <UserFilter />,
+          element: <UserPage />,
         },
       ],
     },

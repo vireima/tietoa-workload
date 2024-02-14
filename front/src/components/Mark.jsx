@@ -2,7 +2,6 @@ export default function Mark({ visible, success, size, position }) {
   const classes = `mark ${
     success === true ? "success" : success === false ? "fail" : "awaiting"
   }`;
-  //   console.log(visible, position, success);
   return (
     <>
       {visible ? (

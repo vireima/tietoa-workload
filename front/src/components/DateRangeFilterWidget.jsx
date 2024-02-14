@@ -36,8 +36,6 @@ export default function DateRangeFilterWidget({
   };
 
   const handleRangeChange = (e) => {
-    console.log(e.target.value);
-
     setRange(Number(e.target.value));
 
     const startDate = endDate.minus({ days: Number(e.target.value) });

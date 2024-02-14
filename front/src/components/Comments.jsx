@@ -21,8 +21,6 @@ export default function Comments({ users, workloads }) {
   const minDate = DateTime.min(...comments.map((comment) => comment.luxonDate));
   const maxDate = DateTime.max(...comments.map((comment) => comment.luxonDate));
 
-  console.log(users);
-
   return (
     <div className="widget">
       <div style={{ margin: "1em 2em" }}>

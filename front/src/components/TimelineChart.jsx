@@ -9,7 +9,7 @@ const spec = {
   layer: [
     {
       transform: [{ fold: ["mentalload", "workload"] }],
-      mark: { type: "point", filled: true },
+      mark: { type: "point", filled: true, opacity: 1, size: 50 },
       encoding: {
         x: {
           field: "datetime",
@@ -28,6 +28,9 @@ const spec = {
             labelExpr:
               "datum.label == 'mentalload' ? 'Kiireen tuntu' : datum.label == 'workload' ? 'Kiireen määrä' : ''",
           },
+        },
+        shape: {
+          field: "username",
         },
         tooltip: [
           {
@@ -60,31 +63,78 @@ const spec = {
         ],
       },
     },
+    // {
+    //   transform: [
+    //     { fold: ["mentalload", "workload"] },
+    //     { timeUnit: "yearmonthdate", field: "datetime", as: "date" },
+    //     { loess: "value", on: "date", groupby: ["key"] },
+    //   ],
+    //   mark: "line",
+    //   encoding: {
+    //     x: {
+    //       field: "date",
+    //       type: "temporal",
+    //     },
+    //     y: {
+    //       field: "value",
+    //       type: "quantitative",
+    //       scale: { domain: [0.0, 1.0] },
+    //     },
+    //     color: {
+    //       field: "key",
+    //     },
+    //   },
+    // },
     {
+      data: { name: "imputed" },
+      mark: {
+        type: "line",
+        point: { opacity: 0.2 },
+        interpolate: "basis",
+        opacity: 0.2,
+      },
       transform: [
         { fold: ["mentalload", "workload"] },
-        { timeUnit: "yearmonthdate", field: "datetime", as: "date" },
-        { loess: "value", on: "date", groupby: ["key"] },
+        {
+          aggregate: [{ op: "mean", field: "value", as: "agg_value" }],
+          groupby: ["date", "key"],
+        },
       ],
-      mark: "line",
       encoding: {
         x: {
           field: "date",
           type: "temporal",
         },
         y: {
-          field: "value",
+          field: "agg_value",
           type: "quantitative",
           scale: { domain: [0.0, 1.0] },
         },
-        color: {
-          field: "key",
-        },
+        color: { field: "key" },
+        tooltip: [
+          {
+            field: "agg_value",
+            title: "Vuorokauden keskiarvo",
+            format: ".0%",
+          },
+          {
+            field: "date",
+            type: "temporal",
+            title: "Päiväys",
+            formatType: "time",
+            format: "%-d.%-m.%Y",
+          },
+        ],
       },
     },
   ],
 };
 
-export default function Timeline({ filteredLoads }) {
-  return <VegaComponent data={{ loads: filteredLoads }} vega_spec={spec} />;
+export default function TimelineChart({ workloads, imputed }) {
+  return (
+    <VegaComponent
+      data={{ loads: workloads, imputed: imputed }}
+      vega_spec={spec}
+    />
+  );
 }

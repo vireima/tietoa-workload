@@ -1,31 +1,22 @@
-import { useOutletContext, useParams } from "react-router-dom";
-import NavigationColumn from "./NavigationColumn";
-import FilteredDashboard from "./FilteredDashboard";
-import Header from "./Header";
+import React from "react";
 
-export default function TagFilter() {
-  const { users, workloads } = useOutletContext();
-  const { tag } = useParams();
+export default function TagFilter({ users, workloads, tag, children }) {
+  const renderChildren = () => {
+    const filteredUsers = users.filter((userdata) =>
+      userdata.tags.includes(tag)
+    );
+    const filteredUserIDs = filteredUsers.map((userdata) => userdata.user);
+    const filteredWorkloads = workloads.data.filter((input) =>
+      filteredUserIDs.includes(input.user)
+    );
 
-  const filteredUsers = users.filter((userdata) => userdata.tags.includes(tag));
-  const filteredUserIDs = filteredUsers.map((userdata) => userdata.user);
-  const filteredWorkloads = workloads.data.filter((input) =>
-    filteredUserIDs.includes(input.user)
-  );
+    return React.Children.map(children, (child) => {
+      return React.cloneElement(child, {
+        users: filteredUsers,
+        workloads: filteredWorkloads,
+      });
+    });
+  };
 
-  return (
-    <div className="column">
-      <div>
-        <Header text={`Kiirekysely ${tag}`} />
-      </div>
-      <div className="v2">
-        <NavigationColumn users={users} tag={tag} />
-        <FilteredDashboard
-          users={users}
-          filteredUsers={filteredUsers}
-          filteredWorkloads={filteredWorkloads}
-        />
-      </div>
-    </div>
-  );
+  return <>{renderChildren()}</>;
 }

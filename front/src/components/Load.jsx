@@ -68,6 +68,7 @@ const spec = {
   ],
 };
 
-export default function Load({ filteredLoads }) {
-  return <VegaComponent data={{ loads: filteredLoads }} vega_spec={spec} />;
+export default function Load(props) {
+  console.log("Load, props", props);
+  return <VegaComponent data={{ loads: props.workloads }} vega_spec={spec} />;
 }

@@ -7,7 +7,7 @@ export default function NavigationColumn({ users, tag }) {
     .filter((tag, index, array) => array.indexOf(tag) == index);
 
   return (
-    <div className="column navigation">
+    <div className="navigation">
       <Link to={"/v2"} className={`navigation-tag${!tag ? " selected" : ""}`}>
         Tietoa
       </Link>

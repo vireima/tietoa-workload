@@ -11,8 +11,6 @@ export async function loader({ params }) {
 export default function Users() {
   const { users } = useLoaderData();
 
-  // console.log(users);
-
   return (
     <div>
       {users.length ? (

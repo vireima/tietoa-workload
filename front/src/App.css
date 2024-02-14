@@ -67,6 +67,7 @@
   display: flex;
   flex-direction: row;
   margin: 1em 0;
+  min-width: 600px;
 }
 
 .widget:hover {
@@ -132,4 +133,14 @@
   100% {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
+}
+
+.footer {
+  border-top: 1px solid gray;
+  width: 80%;
+  margin: auto;
+  margin: 1em auto;
+  color: gray;
+  opacity: 50%;
+  font-size: x-small;
 }

@@ -39,7 +39,7 @@ function imputeArray(data, minDate, maxDate) {
       return {
         workload: lastValue.workload,
         mentalload: lastValue.mentalload,
-        date: date,
+        date_luxon: date,
         imputed: !date.hasSame(lastValue.date, "day"),
       };
 
@@ -63,7 +63,7 @@ function imputeArray(data, minDate, maxDate) {
             lastValue.workload * (1 - ratio) + nextValue.workload * ratio,
           mentalload:
             lastValue.mentalload * (1 - ratio) + nextValue.mentalload * ratio,
-          date: date,
+          date_luxon: date,
           imputed: true,
         };
 
@@ -73,7 +73,7 @@ function imputeArray(data, minDate, maxDate) {
         return {
           workload: nextValue.workload,
           mentalload: nextValue.mentalload,
-          date: date,
+          date_luxon: date,
           imputed: !date.hasSame(nextValue.date, "day"),
         };
       }
@@ -85,7 +85,7 @@ function imputeArray(data, minDate, maxDate) {
       return {
         workload: nextValue.workload,
         mentalload: nextValue.mentalload,
-        date: date,
+        date_luxon: date,
         imputed: true,
       };
     }
@@ -102,7 +102,7 @@ export default function impute(data, minDate, maxDate) {
     imputed.push(
       ...imputeArray(byUser[user], minDate, maxDate).map((val) => {
         const newVal = { ...val, user: user };
-        newVal.date = newVal.date.toISODate();
+        newVal.date = newVal.date_luxon.toISODate();
         return newVal;
       })
     )

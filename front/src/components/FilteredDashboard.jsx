@@ -1,4 +1,4 @@
-import Timeline from "./Timeline";
+import TimelineChart from "./TimelineChart";
 import Load from "./Load";
 import Density from "./Density";
 import Trend from "./Trend";
@@ -8,6 +8,10 @@ import Comments from "./Comments";
 import NoData from "./notifications/NoData";
 import DateRangeFilterWidget from "./DateRangeFilterWidget";
 import { useState } from "react";
+import TrellisChart from "./TrellisChart";
+import ActivityChart from "./ActivityChart";
+import TestFilter from "./TestFilter";
+import TestFilterWidget from "./TestFilterWidget";
 
 export default function FilteredDashboard({
   users,
@@ -17,7 +21,8 @@ export default function FilteredDashboard({
   const [startDate, setStartDate] = useState(DateTime.now().minus({ days: 7 }));
   const [endDate, setEndDate] = useState(DateTime.now());
   const minDate = DateTime.min(
-    ...filteredWorkloads.map((load) => load.datetime_luxon)
+    ...filteredWorkloads.map((load) => load.datetime_luxon),
+    startDate
   );
 
   const dateFilteredWorkloads = filteredWorkloads.filter((load) => {
@@ -26,13 +31,26 @@ export default function FilteredDashboard({
 
   // const imputedWorkloads = impute(filteredWorkloads, startDate, endDate);
   const imputedWorkloads = impute(filteredWorkloads, minDate, endDate);
+  const dateFilteredImputedWorkloads = imputedWorkloads.filter((load) => {
+    return load.date_luxon >= startDate && load.date_luxon <= endDate;
+  });
 
   return (
     <>
       {filteredWorkloads && filteredWorkloads?.length > 0 ? (
         <>
           <div className="column">
-            <Timeline filteredLoads={dateFilteredWorkloads} />
+            <TestFilter filtered={["A", "B", "C"]} a={"kukka"}>
+              <TestFilterWidget filtered={["123", "G"]} />
+              <TestFilterWidget a={"kekkonen"} />
+              <p>Testiriviä.</p>
+            </TestFilter>
+            <TimelineChart
+              filteredLoads={dateFilteredWorkloads}
+              imputedLoads={dateFilteredImputedWorkloads}
+            />
+            <TrellisChart filteredLoads={dateFilteredImputedWorkloads} />
+            <ActivityChart filteredLoads={filteredWorkloads} />
             <Load filteredLoads={dateFilteredWorkloads} />
             <Density filteredLoads={dateFilteredWorkloads} />
           </div>

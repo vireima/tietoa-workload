@@ -27,7 +27,6 @@ export default function ClickableCanvas({ user }) {
   };
 
   const handleSuccess = (response) => {
-    console.log(response.data);
     setLoadId(response.data);
     setSuccess(true);
   };

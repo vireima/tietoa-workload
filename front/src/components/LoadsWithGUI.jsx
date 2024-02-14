@@ -4,7 +4,7 @@ import { config } from "../config";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DateTime } from "luxon";
-import Timeline from "./Timeline";
+import TimelineChart from "./TimelineChart";
 import Density from "./Density";
 import { Link } from "react-router-dom";
 import StatisticWidget from "./StatisticWidget";
@@ -26,15 +26,12 @@ export default function LoadsWithGUI({ user }) {
     if (before) params.before = DateTime.fromISO(before).toISO();
     if (tags && tags.length > 0) params.tags = tags;
 
-    console.log("params:", params);
     const response = await axios.get(`${config.API_URL}/loads`, {
       params: params,
       paramsSerializer: { indexes: null },
     });
 
     const data = response.data;
-
-    console.log("data: ", data);
 
     setData(data);
   }
@@ -56,7 +53,7 @@ export default function LoadsWithGUI({ user }) {
         )}
       </div>
       <div className="dashboard-charts">
-        <Timeline filteredLoads={data.data} />
+        <TimelineChart filteredLoads={data.data} />
         <Load filteredLoads={data.data} />
         <Density filteredLoads={data.data} />
         <StatisticWidget
