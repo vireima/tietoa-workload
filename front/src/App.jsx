@@ -11,6 +11,7 @@ import TagPage from "./components/TagPage";
 import UserPage from "./components/UserPage";
 import OverallPage from "./components/OverallPage";
 import UserListPage from "./components/UserListPage";
+import FastInput from "./routes/fast_input";
 
 function App() {
   const [data, setData] = useState([]);
@@ -47,6 +48,11 @@ function App() {
           element: <Input />,
         },
       ],
+    },
+    {
+      path: "input/:user",
+      element: <FastInput />,
+      errorElement: <Error />,
     },
   ]);
 

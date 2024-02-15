@@ -1,0 +1,12 @@
+.profile-status-text {
+  font-style: italic;
+}
+
+.profile-icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 1ex;
+  border-radius: 50%;
+  position: relative;
+  top: 0.6ex;
+}

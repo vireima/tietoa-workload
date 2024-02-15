@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
+import "../styles/profile.css";
+import { emojify, has } from "node-emoji";
 
 function SlackIcon() {
   return (
@@ -29,37 +31,51 @@ function SlackIcon() {
   );
 }
 
-function userListItem(user) {
+function userListItem(user, key) {
+  const status_text = `Status: <span class="profile-status-text">${
+    has(user.slack.profile.status_emoji)
+      ? emojify(user.slack.profile.status_emoji)
+      : ""
+  }${user.slack.profile.status_text}</span><br/>`;
+  const tooltip_html = `<p><img class="profile-icon" src="${
+    user.slack.profile.image_32
+  }" width="32" height="32"/>${
+    user.slack.profile.real_name
+  }<br/>Käyttäjänimi: ${user.slack.profile.display_name}<br/>${
+    user.slack.profile.status_text ? status_text : ""
+  }Slack-ID: ${user.user}<br/>Aktiivinen: ${
+    user.active ? "kyllä" : "ei"
+  }<br/>Slack-muistukset: ${user.notifications ? "kyllä" : "ei"}</p>`;
+
   return (
-    <>
-      <li
-        key={user.user}
-        data-tooltip-id={user.user}
-        data-tooltip-html={`<p>${user.username}<hr/><br/>Slack-ID: ${
-          user.user
-        }<br/>Aktiivinen: ${
-          user.active ? "kyllä" : "ei"
-        }<br/>Slack-muistukset: ${user.notifications ? "kyllä" : "ei"}</p>`}
-        data-tooltip-place="left"
+    <li
+      key={key}
+      data-tooltip-id={user.user}
+      data-tooltip-html={tooltip_html}
+      data-tooltip-place="left"
+    >
+      <span
+        className={`content-username${
+          user.active ? " data-user-active" : " data-user-inactive"
+        }${user.notifications ? " data-user-notifications" : ""}`}
       >
-        <span
-          className={`content-username${
-            user.active ? " data-user-active" : " data-user-inactive"
-          }${user.notifications ? " data-user-notifications" : ""}`}
-        >
-          <Link to={`/u/${user.user}`} relative="path">
-            {user.username}
-          </Link>
+        <span>
+          {has(user.slack.profile.status_emoji)
+            ? emojify(user.slack.profile.status_emoji)
+            : ""}
         </span>
-        {user.tags ? (
-          <span className="content-tags">{user.tags.join(", ")}</span>
-        ) : (
-          <></>
-        )}
-        {user.notifications ? <SlackIcon /> : <></>}
-      </li>
+        <Link to={`/u/${user.user}`} relative="path">
+          {user.username}
+        </Link>
+      </span>
+      {user.tags ? (
+        <span className="content-tags">{user.tags.join(", ")}</span>
+      ) : (
+        <></>
+      )}
+      {user.notifications ? <SlackIcon /> : <></>}
       <Tooltip id={user.user} />
-    </>
+    </li>
   );
 }
 
@@ -72,18 +88,18 @@ export default function UserListWidget({ users }) {
 
   return (
     <div className="widget users-list">
-      {tags.map((tag, index) => (
-        <ul>
-          <li>{tag}</li>
+      {tags.map((tag, tag_index) => (
+        <ul key={tag_index}>
+          <li key={tag_index}>{tag}</li>
           {users
             .filter((user) => user.tags.includes(tag))
-            .map((user, index) => userListItem(user))}
+            .map((user, index) => userListItem(user, `${tag}-${index}`))}
         </ul>
       ))}
       {untagged ? (
         <ul>
-          <li>Muut</li>
-          {untagged.map((user, index) => userListItem(user))}
+          <li key="others">Muut</li>
+          {untagged.map((user, index) => userListItem(user, `others-${index}`))}
         </ul>
       ) : (
         <></>

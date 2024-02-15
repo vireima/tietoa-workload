@@ -13,10 +13,25 @@ export default function ClickableCanvas({ user }) {
   const [success, setSuccess] = useState(undefined);
   const [loadId, setLoadId] = useState(undefined);
   const [lastError, setLastError] = useState(undefined);
+  const [userdata, setUserData] = useState(undefined);
 
   const markSize = 30;
   const canvasWidth = 500;
   const canvasHeight = 500;
+
+  const fetchUsers = () => {
+    axios
+      .get(`${config.API_URL}/users`)
+      .then((response) => {
+        const currentUserData = response.data.find((u) => u.user === user.user);
+        setUserData(currentUserData);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLastError(`${error.response.status} ${error.message}`);
+        setTimeout(() => setLastError(undefined), 8000);
+      });
+  };
 
   const handleMouseMove = (event) => {
     // 👇 Get mouse position relative to element
@@ -94,10 +109,35 @@ export default function ClickableCanvas({ user }) {
     };
   }, []);
 
+  useEffect(fetchUsers, []);
+
   return (
     <>
-      <h2>{user.username}</h2>
-      <Link to={`/u/${user.user}`}>Omat sivut</Link>
+      <p>
+        {userdata ? (
+          <>
+            <img
+              src={userdata.slack.profile.image_512}
+              style={{
+                width: "3em",
+                height: "3em",
+                borderRadius: "50%",
+                position: "relative",
+                top: "1.5em",
+              }}
+            />
+            <span style={{ fontSize: "x-large", marginLeft: "4%" }}>
+              {userdata.slack.profile.real_name}
+            </span>
+          </>
+        ) : (
+          ""
+        )}
+        <br />
+        <Link to={`/u/${user.user}`} style={{ marginLeft: "6%" }}>
+          Omat sivut
+        </Link>
+      </p>
       <div className="input-table">
         <div className="input-row">
           <div className="input-cell vertical">

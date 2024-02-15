@@ -18,7 +18,7 @@ export default function UserListPage() {
           <NavigationColumn users={users} />
         </Column>
         <Column>
-          <UserListWidget users={users} />
+          <UserListWidget users={users} key="olo" />
         </Column>
       </div>
     </>
