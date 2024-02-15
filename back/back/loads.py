@@ -6,6 +6,7 @@ import httpx
 
 # import mongo
 import pandas as pd
+from cache import AsyncTTL
 from loguru import logger
 from slack_sdk.web.async_client import AsyncWebClient
 
@@ -13,7 +14,9 @@ from back import models, mongo
 from back.config import settings
 
 
-async def fetch_slack_users() -> list:
+@AsyncTTL(time_to_live=60)
+async def fetch_slack_users(ttl_hash=None) -> list:
+    del ttl_hash
     slack_client = AsyncWebClient(token=settings.slack_bot_token)
 
     users = []
