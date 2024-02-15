@@ -17,7 +17,7 @@ async def fetch_slack_users() -> list:
     slack_client = AsyncWebClient(token=settings.slack_bot_token)
 
     users = []
-    async for page in await slack_client.users_list():
+    async for page in await slack_client.users_list(limit=150):
         users += page.get("members")
 
     return users
@@ -44,8 +44,6 @@ async def fetch_users() -> list[models.UserOutputModel]:
             for slack_data in slack_userdata
             if user["user"] == slack_data["id"]
         )
-
-    logger.debug(grist_userdata)
 
     return [models.UserOutputModel(**x) for x in grist_userdata]
 

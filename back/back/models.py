@@ -66,6 +66,7 @@ class SlackProfileModel(BaseModel):
     display_name: str
     status_text: str
     status_emoji: str
+    image_32: AnyHttpUrl
     image_512: AnyHttpUrl
 
 
