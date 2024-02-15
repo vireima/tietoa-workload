@@ -63,6 +63,7 @@ class LoadOutputModel(LoadInputModel):
 
 class SlackProfileModel(BaseModel):
     real_name: str
+    display_name: str
     status_text: str
     status_emoji: str
     image_512: AnyHttpUrl
