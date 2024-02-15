@@ -27,23 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @app.get("/")
-# def root():
-#     return [
-#         {
-#             "message": "Hello!",
-#             "arvo1": 12,
-#             "arvo2": -3.6,
-#             "kommentti": "testikommentti",
-#         },
-#         {
-#             "message": "Hello again!",
-#             "arvo1": 13,
-#             "arvo2": 0.62,
-#             "kommentti": "ei kommenttia",
-#         },
-#     ]
-
 
 @app.get("/loads")
 async def get_loads(

@@ -15,6 +15,8 @@ export default function DateRangeFilter({
     startDate
   );
 
+  const userdataById = new Map(new Set(users.map((user) => [user.user, user])));
+
   const renderChildren = () => {
     const dateFilteredWorkloads = workloads.filter((load) => {
       return load.datetime_luxon >= startDate && load.datetime_luxon <= endDate;
@@ -23,6 +25,10 @@ export default function DateRangeFilter({
     const imputedWorkloads = impute(workloads, minDate, endDate);
     const dateFilteredImputedWorkloads = imputedWorkloads.filter((load) => {
       return load.date_luxon >= startDate && load.date_luxon <= endDate;
+    });
+
+    dateFilteredImputedWorkloads.forEach((load) => {
+      load.username = userdataById.get(load.user).username;
     });
 
     console.log("DateRangeFilter filteredWorkloads", dateFilteredWorkloads);

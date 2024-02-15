@@ -8,13 +8,13 @@ export default function NavigationColumn({ users, tag }) {
 
   return (
     <div className="navigation">
-      <Link to={"/v2"} className={`navigation-tag${!tag ? " selected" : ""}`}>
+      <Link to={"/"} className={`navigation-tag${!tag ? " selected" : ""}`}>
         Tietoa
       </Link>
       {tags.map((tg) => (
         <Link
           key={tg}
-          to={`/v2/tag/${tg}`}
+          to={`/tag/${tg}`}
           relative="path"
           className={`navigation-tag${tg == tag ? " selected" : ""}`}
         >
@@ -27,7 +27,7 @@ export default function NavigationColumn({ users, tag }) {
           .map((user) => (
             <Link
               key={user.user}
-              to={`/v2/u/${user.user}`}
+              to={`/u/${user.user}`}
               className="navigation-user"
             >
               {user.username}

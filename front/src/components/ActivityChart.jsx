@@ -37,6 +37,6 @@ const spec = {
   },
 };
 
-export default function ActivityChart({ filteredLoads }) {
-  return <VegaComponent data={{ loads: filteredLoads }} vega_spec={spec} />;
+export default function ActivityChart({ workloads }) {
+  return <VegaComponent data={{ loads: workloads }} vega_spec={spec} />;
 }

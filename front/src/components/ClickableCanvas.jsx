@@ -33,16 +33,15 @@ export default function ClickableCanvas({ user }) {
 
   const handleFailure = (error) => {
     console.error(error);
-    setLastError(`${error.response.status} ${error.response.data.detail}`);
+    setLastError(`${error.response.status} ${error.message}`);
     setSuccess(false);
 
-    setTimeout(() => setLastError(undefined), 4000);
+    setTimeout(() => setLastError(undefined), 8000);
   };
 
   const handleClick = (event) => {
-    setSuccess(undefined);
-
-    if (clicked) {
+    if (clicked && success) {
+      setSuccess(undefined);
       axios
         .patch(`${config.API_URL}/loads/${loadId}`, {
           user: user.user,
@@ -52,6 +51,7 @@ export default function ClickableCanvas({ user }) {
         .then(handleSuccess)
         .catch(handleFailure);
     } else {
+      setSuccess(undefined);
       axios
         .post(`${config.API_URL}/loads`, {
           user: user.user,

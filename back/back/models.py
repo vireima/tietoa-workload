@@ -66,6 +66,7 @@ class UserOutputModel(BaseModel):
     user: str
     tags: Tags
     active: bool
+    notifications: bool
 
 
 class LoadQueryInputModel(BaseModel):

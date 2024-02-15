@@ -63,28 +63,6 @@ const spec = {
         ],
       },
     },
-    // {
-    //   transform: [
-    //     { fold: ["mentalload", "workload"] },
-    //     { timeUnit: "yearmonthdate", field: "datetime", as: "date" },
-    //     { loess: "value", on: "date", groupby: ["key"] },
-    //   ],
-    //   mark: "line",
-    //   encoding: {
-    //     x: {
-    //       field: "date",
-    //       type: "temporal",
-    //     },
-    //     y: {
-    //       field: "value",
-    //       type: "quantitative",
-    //       scale: { domain: [0.0, 1.0] },
-    //     },
-    //     color: {
-    //       field: "key",
-    //     },
-    //   },
-    // },
     {
       data: { name: "imputed" },
       mark: {

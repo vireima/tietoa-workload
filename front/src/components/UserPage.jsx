@@ -12,6 +12,9 @@ import DateRangeFilterWidget from "./DateRangeFilterWidget";
 import UserFilter from "./UserFilter";
 import Density from "./Density";
 import Comments from "./Comments";
+import ActivityChart from "./ActivityChart";
+import GroupedTimelineChart from "./GroupedTimelineChart";
+import { Link } from "react-router-dom";
 
 export default function UserPage() {
   const { users, workloads } = useOutletContext();
@@ -28,6 +31,7 @@ export default function UserPage() {
     <>
       <div>
         <Header text={`Kiirekysely, ${current_user.username}`} />
+        <Link to={`/i/${user}`}>Lisää kiiremerkintä</Link>
       </div>
       <div className="v2">
         <Column>
@@ -49,6 +53,7 @@ export default function UserPage() {
             <Column>
               <Density />
               <Comments />
+              <ActivityChart />
             </Column>
           </DateRangeFilter>
         </UserFilter>

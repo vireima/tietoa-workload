@@ -38,7 +38,7 @@ export default function Comments({ users, workloads }) {
                     {comment.luxonDate.toLocaleString(format)}
                   </span>
                   <span className="content-username">
-                    <Link to={`/v2/u/${comment.user}`} relative="path">
+                    <Link to={`/u/${comment.user}`} relative="path">
                       {usernames.get(comment.user)}
                     </Link>
                   </span>

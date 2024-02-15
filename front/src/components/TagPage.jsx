@@ -12,6 +12,7 @@ import DateRangeFilterWidget from "./DateRangeFilterWidget";
 import UserFilter from "./UserFilter";
 import Comments from "./Comments";
 import Density from "./Density";
+import GroupedTimelineChart from "./GroupedTimelineChart";
 
 export default function UserPage() {
   const { users, workloads } = useOutletContext();
@@ -20,6 +21,7 @@ export default function UserPage() {
   const [startDate, setStartDate] = useState(DateTime.now().minus({ days: 7 }));
   const [endDate, setEndDate] = useState(DateTime.now());
 
+  console.log("TagPage workloads", workloads);
   return (
     <>
       <div>
@@ -32,6 +34,7 @@ export default function UserPage() {
         <TagFilter workloads={workloads} users={users} tag={tag}>
           <DateRangeFilter startDate={startDate} endDate={endDate}>
             <Column>
+              <GroupedTimelineChart />
               <TimelineChart />
               <Load />
 
