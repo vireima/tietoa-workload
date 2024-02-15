@@ -3,7 +3,7 @@ import datetime
 import arrow
 import pytz
 from loguru import logger
-from pydantic import BaseModel, BeforeValidator, Field
+from pydantic import AnyHttpUrl, BaseModel, BeforeValidator, Field
 from typing_extensions import Annotated
 
 TZ_UTC = pytz.timezone("UTC")
@@ -61,12 +61,27 @@ class LoadOutputModel(LoadInputModel):
     # _id: str
 
 
+class SlackProfileModel(BaseModel):
+    real_name: str
+    status_text: str
+    status_emoji: str
+    image_512: AnyHttpUrl
+
+
+class SlackUserModel(BaseModel):
+    deleted: bool
+    name: str
+    updated: int
+    profile: SlackProfileModel
+
+
 class UserOutputModel(BaseModel):
     username: str
     user: str
     tags: Tags
     active: bool
     notifications: bool
+    slack: SlackUserModel
 
 
 class LoadQueryInputModel(BaseModel):

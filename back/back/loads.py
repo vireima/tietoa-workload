@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 
 import arrow
@@ -6,23 +7,47 @@ import httpx
 # import mongo
 import pandas as pd
 from loguru import logger
+from slack_sdk.web.async_client import AsyncWebClient
 
 from back import models, mongo
 from back.config import settings
 
 
+async def fetch_slack_users() -> list:
+    slack_client = AsyncWebClient(token=settings.slack_bot_token)
+
+    users = []
+    async for page in await slack_client.users_list():
+        users += page.get("members")
+
+    return users
+
+
 async def fetch_users() -> list[models.UserOutputModel]:
     headers = {"Authorization": f"Bearer {settings.grist_api_key}"}
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            f"{settings.grist_api_url}/{settings.grist_api_userdoc}/tables/{settings.grist_api_usertable}/records",
-            headers=headers,
+    async with httpx.AsyncClient() as httpx_client:
+        responses = await asyncio.gather(
+            httpx_client.get(
+                f"{settings.grist_api_url}/{settings.grist_api_userdoc}/tables/{settings.grist_api_usertable}/records",
+                headers=headers,
+            ),
+            fetch_slack_users(),
         )
 
-        lst = [x["fields"] for x in response.json()["records"]]
+    grist_userdata = [x["fields"] for x in responses[0].json()["records"]]
+    slack_userdata = responses[1]
 
-        return [models.UserOutputModel(**x) for x in lst]
+    for user in grist_userdata:
+        user["slack"] = next(
+            slack_data
+            for slack_data in slack_userdata
+            if user["user"] == slack_data["id"]
+        )
+
+    logger.debug(grist_userdata)
+
+    return [models.UserOutputModel(**x) for x in grist_userdata]
 
 
 async def loads(query: models.LoadQueryInputModelWithLists):
