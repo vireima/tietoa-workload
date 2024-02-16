@@ -1,3 +1,4 @@
+import { mentalload_color, workload_color } from "../config";
 import VegaComponent from "./VegaComponent";
 
 const spec = {
@@ -36,6 +37,10 @@ const spec = {
             labelExpr:
               "datum.label == 'mentalload' ? 'Kiireen tuntu' : datum.label == 'workload' ? 'Kiireen määrä' : ''",
           },
+          scale: {
+            domain: ["workload", "mentalload"],
+            range: [workload_color, mentalload_color],
+          },
         },
         fillOpacity: { value: 0.1 },
       },
@@ -43,5 +48,12 @@ const spec = {
   ],
 };
 export default function Density({ workloads }) {
-  return <VegaComponent data={{ loads: workloads }} vega_spec={spec} />;
+  return (
+    <VegaComponent
+      data={{ loads: workloads }}
+      vega_spec={spec}
+      height={300}
+      hidden={!workloads || !workloads.length}
+    />
+  );
 }

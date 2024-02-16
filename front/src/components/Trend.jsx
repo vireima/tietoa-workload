@@ -1,6 +1,7 @@
 import { DateTime, Duration, Interval } from "luxon";
 import { mean } from "simple-statistics";
 import StatisticWidget from "./StatisticWidget";
+import { workload_color, mentalload_color } from "../config";
 
 function rolling(inputArray, size) {
   return Array.from(
@@ -10,6 +11,8 @@ function rolling(inputArray, size) {
 }
 
 export default function Trend({ users, workloads, range }) {
+  if (!workloads || !workloads.length || workloads.length < 2) return <></>;
+
   const weekAgo = DateTime.now().minus({ days: range });
   const withinRange = workloads.filter(
     (load) => DateTime.fromISO(load.date) >= weekAgo
@@ -31,8 +34,8 @@ export default function Trend({ users, workloads, range }) {
   const meanWeeklyMentalload = mean(weekWindows.map((load) => load.mentalload));
 
   return (
-    <>
-      <div>
+    <div>
+      <div style={{ color: workload_color }}>
         <StatisticWidget
           name="statistics-weekly-workload"
           header="Kiireen määrä:"
@@ -41,6 +44,8 @@ export default function Trend({ users, workloads, range }) {
           description={`<p>Kiireen määrä keskimäärin<br />- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskiarvoon</p>`}
           percentage={true}
         />
+      </div>
+      <div style={{ color: mentalload_color }}>
         <StatisticWidget
           name="statistics-weekly-mentalload"
           header="Kiireen tuntu:"
@@ -49,15 +54,15 @@ export default function Trend({ users, workloads, range }) {
           description={`<p>Kiireen tuntu keskimäärin<br/>- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskiarvoon</p>`}
           percentage={true}
         />
-        <StatisticWidget
-          name="statistics-weekly-count"
-          header="Vastauksia:"
-          value={withinRange.filter((load) => !load.imputed).length}
-          reference_value={meanWeeklyCount}
-          description={`<p>Kiirekyselyn vastausten määrä<br/>- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskimääräiseen vastausmäärään</p>`}
-          percentage={false}
-        />
       </div>
-    </>
+      <StatisticWidget
+        name="statistics-weekly-count"
+        header="Vastauksia:"
+        value={withinRange.filter((load) => !load.imputed).length}
+        reference_value={meanWeeklyCount}
+        description={`<p>Kiirekyselyn vastausten määrä<br/>- viimeisen ${range} vrk sisään<br/>- suhteessa kaikkien ${range} vrk jaksojen keskimääräiseen vastausmäärään</p>`}
+        percentage={false}
+      />
+    </div>
   );
 }

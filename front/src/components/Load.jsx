@@ -7,7 +7,7 @@ const spec = {
   data: { name: "loads" },
   layer: [
     {
-      mark: "circle",
+      mark: { type: "point", filled: true, angle: 45 },
       encoding: {
         x: {
           field: "workload",
@@ -30,13 +30,23 @@ const spec = {
         size: {
           condition: {
             test: "datum.comment != null",
-            value: 80,
+            value: 100,
           },
           value: 15,
         },
+        shape: {
+          condition: {
+            test: "datum.comment != null",
+            value: "cross",
+          },
+          value: "circle",
+        },
+        color: {
+          field: "slack.profile.display_name",
+        },
         tooltip: [
           {
-            field: "username",
+            field: "slack.profile.display_name",
             type: "nominal",
             title: "Nimi",
           },

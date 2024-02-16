@@ -1,3 +1,4 @@
+import { mentalload_color, workload_color } from "../config";
 import VegaComponent from "./VegaComponent";
 
 const spec = {
@@ -27,6 +28,10 @@ const spec = {
           legend: {
             labelExpr:
               "datum.label == 'mentalload' ? 'Kiireen tuntu' : datum.label == 'workload' ? 'Kiireen määrä' : ''",
+          },
+          scale: {
+            domain: ["workload", "mentalload"],
+            range: [workload_color, mentalload_color],
           },
         },
         shape: {
@@ -113,6 +118,8 @@ export default function TimelineChart({ workloads, imputed }) {
     <VegaComponent
       data={{ loads: workloads, imputed: imputed }}
       vega_spec={spec}
+      height={470}
+      hidden={!workloads || !workloads.length}
     />
   );
 }
