@@ -6,6 +6,7 @@ import Loading from "../components/notifications/Loading";
 import NoData from "../components/notifications/NoData";
 import { DateTime } from "luxon";
 import Footer from "../components/Footer";
+import AsyncError from "../components/AsyncError";
 
 export async function loader({ params }) {
   const usersPromise = axios
@@ -35,7 +36,7 @@ export default function Data() {
 
   return (
     <React.Suspense fallback={<Loading />}>
-      <Await resolve={loadedData.data} errorElement={<NoData />}>
+      <Await resolve={loadedData.data} errorElement={<AsyncError />}>
         {(data) => (
           <>
             <Outlet context={data} />

@@ -8,34 +8,43 @@ export default function NavigationColumn({ users, tag }) {
 
   return (
     <div className="navigation">
-      <Link to={"/"} className={`navigation-tag${!tag ? " selected" : ""}`}>
-        Tietoa
-      </Link>
-      {tags.map((tg) => (
-        <Link
-          key={tg}
-          to={`/tag/${tg}`}
-          relative="path"
-          className={`navigation-tag${tg == tag ? " selected" : ""}`}
-        >
-          {tg}
-        </Link>
-      ))}
-      {tag ? (
-        users
-          .filter((user) => user.tags.includes(tag))
-          .map((user) => (
-            <Link
-              key={user.user}
-              to={`/u/${user.user}`}
-              className="navigation-user"
-            >
-              {user.username}
+      <ul>
+        <li key="tietoa" className={`navigation-tag${!tag ? " selected" : ""}`}>
+          <Link to={"/"}>Tietoa</Link>
+        </li>
+        {tags.map((tg) => (
+          <li
+            key={tg}
+            className={`navigation-tag${tg == tag ? " selected" : ""}`}
+          >
+            <Link to={`/tag/${tg}`} relative="path">
+              {tg}
             </Link>
-          ))
-      ) : (
-        <></>
-      )}
+            <ul>
+              {tg === tag ? (
+                users
+                  .filter((user) => user.tags.includes(tag))
+                  .map((user) => (
+                    <li key={user.user} className="navigation-user">
+                      <Link to={`/u/${user.user}`}>
+                        {user.slack.profile.display_name ||
+                          user.slack.profile.real_name}
+                      </Link>
+                    </li>
+                  ))
+              ) : (
+                <></>
+              )}
+            </ul>
+          </li>
+        ))}
+
+        <li key="users">
+          <Link to={`/u`} className="">
+            Käyttäjät
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 }

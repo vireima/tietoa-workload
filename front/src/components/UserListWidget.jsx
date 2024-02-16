@@ -37,6 +37,7 @@ function userListItem(user, key) {
       ? emojify(user.slack.profile.status_emoji)
       : ""
   }${user.slack.profile.status_text}</span><br/>`;
+
   const tooltip_html = `<p><img class="profile-icon" src="${
     user.slack.profile.image_32
   }" width="32" height="32"/>${
@@ -53,6 +54,7 @@ function userListItem(user, key) {
       data-tooltip-id={user.user}
       data-tooltip-html={tooltip_html}
       data-tooltip-place="left"
+      style={{ whiteSpace: "nowrap" }}
     >
       <span
         className={`content-username${
@@ -65,7 +67,7 @@ function userListItem(user, key) {
             : ""}
         </span>
         <Link to={`/u/${user.user}`} relative="path">
-          {user.username}
+          {user.slack.profile.display_name || user.slack.profile.real_name}
         </Link>
       </span>
       {user.tags ? (

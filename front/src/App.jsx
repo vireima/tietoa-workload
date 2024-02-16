@@ -5,13 +5,12 @@ import "./App.css";
 import personService from "./services/person";
 
 import Input from "./routes/input";
-import Error from "./routes/error";
+import RouteError from "./components/RouteError";
 import Data, { loader as dataLoader } from "./routes/data";
 import TagPage from "./components/TagPage";
 import UserPage from "./components/UserPage";
 import OverallPage from "./components/OverallPage";
 import UserListPage from "./components/UserListPage";
-import FastInput from "./routes/fast_input";
 
 function App() {
   const [data, setData] = useState([]);
@@ -24,7 +23,7 @@ function App() {
     {
       path: "/",
       element: <Data />,
-      errorElement: <Error />,
+      errorElement: <RouteError />,
       loader: dataLoader,
       children: [
         {
@@ -43,16 +42,12 @@ function App() {
           path: "u/",
           element: <UserListPage />,
         },
-        {
-          path: "i/:user",
-          element: <Input />,
-        },
       ],
     },
     {
-      path: "input/:user",
-      element: <FastInput />,
-      errorElement: <Error />,
+      path: "i/:user",
+      element: <Input />,
+      errorElement: <RouteError />,
     },
   ]);
 
