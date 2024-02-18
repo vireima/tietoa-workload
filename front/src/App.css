@@ -4,21 +4,9 @@
   text-align: center;
 }
 
-.widget {
-  box-shadow: 3px 3px rgba(0, 0, 0, 0.2);
-}
-
 .chart {
   min-width: 600px;
 }
-
-/* #root > div > div {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  border: 2px solid magenta;
-  justify-content: space-around;
-}*/
 
 .dashboard-charts {
   display: flex;
@@ -64,10 +52,12 @@
 }
 
 .widget {
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
   margin: 1em 0;
   min-width: 600px;
+  max-width: 600px;
 }
 
 .widget:hover {
@@ -130,6 +120,10 @@
   border-radius: 50%;
   border: 5px solid #fff;
   animation: prixClipFix 2s linear infinite;
+}
+
+.invalid-content {
+  opacity: 20%;
 }
 
 @keyframes rotate {

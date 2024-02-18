@@ -6,6 +6,7 @@ import {
   default_time_format_locale,
 } from "../config";
 import { useState, useEffect } from "react";
+import NoData from "./notifications/NoData";
 
 export default function VegaComponent({ vega_spec, data, height, hidden }) {
   const [mode, setMode] = useState("light");
@@ -55,7 +56,7 @@ export default function VegaComponent({ vega_spec, data, height, hidden }) {
           timeFormatLocale={default_time_format_locale}
         />
       ) : (
-        <></>
+        <NoData />
       )}
     </div>
   );

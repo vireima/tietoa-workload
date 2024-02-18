@@ -137,11 +137,13 @@ h1 {
 input,
 button {
   margin: 0;
+  margin-bottom: 0.5ex;
   padding: 0.5em 1.5em;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 3px;
   transition: border-color 0.25s;
 }
+
 input {
   width: 20em;
   height: 1.2em;

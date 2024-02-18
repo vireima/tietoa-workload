@@ -69,6 +69,9 @@ export const default_spec = {
       "guide-label": {
         fill: "gray",
       },
+      cell: {
+        stroke: "transparent",
+      },
     },
   },
 };

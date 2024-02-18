@@ -3,57 +3,80 @@ import { workload_color, mentalload_color } from "../config";
 
 const spec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-  title: "Ahdistuneimmat",
+  title: "Ajanjakson keskimääräinen kiireen tuntu / määrä",
   height: 140,
   width: 540,
   data: { name: "loads" },
-  layer: [
+  transform: [
+    { flatten: ["tags"], as: ["tag"] },
+    // { fold: ["mentalload", "workload"], as: ["key", "value"] },
+  ],
+
+  hconcat: [
     {
       mark: { type: "bar", height: 12, color: mentalload_color },
       encoding: {
         x: {
           field: "mentalload",
           type: "quantitative",
-          aggregate: "max",
+          aggregate: "mean",
           title: false,
           axis: { labels: false },
         },
         y: {
-          field: "slack.profile.display_name",
+          field: "tag",
           type: "nominal",
           title: null,
           sort: { field: "mentalload", op: "max", order: "descending" },
+          axis: { labelPadding: 6 },
         },
         tooltip: [
+          {
+            field: "mentalload",
+            aggregate: "mean",
+            title: "Kiireen tuntu keskimäärin",
+            format: ".0%",
+          },
           {
             field: "mentalload",
             aggregate: "max",
             title: "Korkein kiireen tuntu",
             format: ".0%",
           },
-          {
-            field: "mentalload",
-            aggregate: "mean",
-            title: "Kiireen  tuntu keskimäärin",
-            format: ".0%",
-          },
         ],
       },
     },
     {
-      mark: { type: "tick", color: "white" },
+      mark: { type: "bar", height: 12, color: workload_color },
       encoding: {
         x: {
-          field: "mentalload",
+          field: "workload",
           type: "quantitative",
           aggregate: "mean",
+          title: false,
+          axis: { labels: false },
         },
         y: {
-          field: "slack.profile.display_name",
+          field: "tag",
           type: "nominal",
           title: null,
-          sort: null,
+          sort: { field: "workload", op: "max", order: "descending" },
+          axis: { labelPadding: 6 },
         },
+        tooltip: [
+          {
+            field: "workload",
+            aggregate: "mean",
+            title: "Kiireen määrä keskimäärin",
+            format: ".0%",
+          },
+          {
+            field: "workload",
+            aggregate: "max",
+            title: "Korkein kiireen määrä",
+            format: ".0%",
+          },
+        ],
       },
     },
   ],
@@ -70,7 +93,7 @@ const spec = {
     },
   },
 };
-export default function MentalloadRankChart({ workloads }) {
+export default function RankChartByTag({ workloads }) {
   return (
     <VegaComponent
       data={{ loads: workloads }}

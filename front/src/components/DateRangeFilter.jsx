@@ -28,22 +28,19 @@ export default function DateRangeFilter({
     });
 
     dateFilteredImputedWorkloads.forEach((load) => {
-      load.username = userdataById.get(load.user).username;
+      load.slack = userdataById.get(load.user).slack;
+      load.tags = userdataById.get(load.user).tags;
     });
 
-    console.log("DateRangeFilter filteredWorkloads", dateFilteredWorkloads);
+    // console.log("DateRangeFilter filteredWorkloads", dateFilteredWorkloads);
 
-    return dateFilteredImputedWorkloads.length > 0 ? (
-      React.Children.map(children, (child) => {
-        return React.cloneElement(child, {
-          users: users,
-          workloads: dateFilteredWorkloads,
-          imputed: dateFilteredImputedWorkloads,
-        });
-      })
-    ) : (
-      <NoData />
-    );
+    return React.Children.map(children, (child) => {
+      return React.cloneElement(child, {
+        users: users,
+        workloads: dateFilteredWorkloads,
+        imputed: dateFilteredImputedWorkloads,
+      });
+    });
   };
 
   return <>{renderChildren()}</>;

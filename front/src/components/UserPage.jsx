@@ -30,7 +30,9 @@ export default function UserPage() {
   return (
     <>
       <div>
-        <Header text={`Kiirekysely, ${current_user.username}`} />
+        <Header
+          text={`Kiirekysely, ${current_user.slack.profile.display_name}`}
+        />
         <Link to={`/i/${user}`}>Lisää kiiremerkintä</Link>
       </div>
       <div className="v2">

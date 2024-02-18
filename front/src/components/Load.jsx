@@ -3,7 +3,6 @@ import VegaComponent from "./VegaComponent";
 const spec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: "Kiireen määrä ja tuntu",
-
   data: { name: "loads" },
   layer: [
     {
@@ -80,5 +79,14 @@ const spec = {
 
 export default function Load(props) {
   console.log("Load, props", props);
-  return <VegaComponent data={{ loads: props.workloads }} vega_spec={spec} />;
+  return (
+    <VegaComponent
+      data={{
+        loads: props.workloads,
+      }}
+      vega_spec={spec}
+      height={450}
+      hidden={!props.workloads || !props.workloads.length}
+    />
+  );
 }

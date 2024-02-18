@@ -4,7 +4,7 @@ import { workload_color, mentalload_color } from "../config";
 const spec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: "Kiireisimmät",
-  height: 100,
+  height: 140,
   width: 540,
   data: { name: "loads" },
   layer: [
@@ -75,7 +75,7 @@ export default function WorkloadRankChart({ workloads }) {
     <VegaComponent
       data={{ loads: workloads }}
       vega_spec={spec}
-      height={100}
+      height={140}
       hidden={!workloads || !workloads.length}
     />
   );

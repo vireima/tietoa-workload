@@ -12,6 +12,10 @@ import DateRangeFilterWidget from "./DateRangeFilterWidget";
 import UserFilter from "./UserFilter";
 import Comments from "./Comments";
 import Density from "./Density";
+import TimelineByTagChart from "./MentalloadTimelineByTagChart";
+import WorkloadTimelineByTagChart from "./WorkloadTimelineByTagChart";
+import MentalloadTimelineByTagChart from "./MentalloadTimelineByTagChart";
+import RankChartByTag from "./RankChartByTag";
 
 export default function UserPage() {
   const { users, workloads } = useOutletContext();
@@ -35,19 +39,18 @@ export default function UserPage() {
           endDate={endDate}
         >
           <Column>
-            <TimelineChart />
+            <WorkloadTimelineByTagChart />
+            <RankChartByTag />
             <Load />
-
+          </Column>
+          <Column>
+            <MentalloadTimelineByTagChart />
             <DateRangeFilterWidget
               startDate={startDate}
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
             />
-          </Column>
-          <Column>
-            <Density />
-            <Comments />
           </Column>
         </DateRangeFilter>
       </div>

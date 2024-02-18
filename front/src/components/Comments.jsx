@@ -23,34 +23,32 @@ export default function Comments({ users, workloads }) {
 
   return (
     <div className="widget">
-      <div style={{ margin: "1em 2em" }}>
-        {comments && comments?.length > 0 ? (
-          <>
-            <h3>Kommentit</h3>
-            <p>
-              Väliltä {minDate.toLocaleString(format)} ..{" "}
-              {maxDate.toLocaleString(format)}{" "}
-            </p>
-            <ul className="data-list content-comments">
-              {comments.map((comment, index) => (
-                <li key={index}>
-                  <span className="content-date">
-                    {comment.luxonDate.toLocaleString(format)}
-                  </span>
-                  <span className="content-username">
-                    <Link to={`/u/${comment.user}`} relative="path">
-                      {usernames.get(comment.user)}
-                    </Link>
-                  </span>
-                  : <span className="content-comment">{comment.comment}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <NoData text={"Ei kommentteja."} />
-        )}
-      </div>
+      {comments && comments?.length > 0 ? (
+        <div style={{ padding: "1em 2em" }}>
+          <h3>Kommentit</h3>
+          <p>
+            Väliltä {minDate.toLocaleString(format)} ..{" "}
+            {maxDate.toLocaleString(format)}{" "}
+          </p>
+          <ul className="data-list content-comments">
+            {comments.map((comment, index) => (
+              <li key={index}>
+                <span className="content-date">
+                  {comment.luxonDate.toLocaleString(format)}
+                </span>
+                <span className="content-username">
+                  <Link to={`/u/${comment.user}`} relative="path">
+                    {usernames.get(comment.user)}
+                  </Link>
+                </span>
+                : <span className="content-comment">{comment.comment}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <NoData text={"Ei kommentteja."} />
+      )}
     </div>
   );
 }
